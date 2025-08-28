@@ -345,14 +345,20 @@ def main():
             game_state['player2_pos'][1]
         )
         
-        # 壁の座標も変換
+        # 壁の座標も変換（ゲーム座標からボード座標へ）
         for wall in game_state['walls']:
-            wall_board_pos = ai.game_to_board(
-                int(wall['x'] + 0.5), 
-                int(wall['y'] + 0.5)
-            )
-            wall['x'] = wall_board_pos[0] - 0.5
-            wall['y'] = wall_board_pos[1] - 0.5
+            # 壁の位置をゲーム座標からボード座標に変換
+            # 壁の座標は0.5刻みなので、適切に変換する
+            wall_game_x = wall['x']
+            wall_game_y = wall['y']
+            
+            # ゲーム座標の壁位置をボード座標に変換
+            wall_board_x = wall_game_x + ai.CENTER
+            wall_board_y = wall_game_y + ai.CENTER
+            
+            # 変換後の座標を壁オブジェクトに設定
+            wall['x'] = wall_board_x
+            wall['y'] = wall_board_y
         
         # 次の行動を決定
         decision = ai.make_decision(game_state)
